@@ -10,33 +10,30 @@ dotenv.config(); // Load environment variables
 
 // Allowed origins for CORS
 const allowedOrigins = [
-  "https://typing-frontend-typingmedias-projects.vercel.app/",
   "http://localhost:3000", 
   "https://typing.media", 
   "http://localhost:3001",
+  "https://typing-frontend-typingmedias-projects.vercel.app/"
 ];
 
-// CORS setup
-app.use(
-  cors({
-    credentials: true,
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // Allow requests without origin (like Postman or mobile apps)
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true); // Allow request if origin is in allowedOrigins
-      } else {
-        callback(new Error("Not allowed by CORS")); // Reject otherwise
-      }
-    },
-  })
-);
+// CORS setup with explicit headers
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin); // Set the origin to match the request origin
+  }
+  res.setHeader("Access-Control-Allow-Credentials", "true"); // Allow credentials
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Allowed methods
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Allowed headers
+  next();
+});
 
-// Middleware for parsing incoming JSON requests
+// Middleware to parse incoming JSON requests
 app.use(bodyParser.json());
 
 // Default route
 app.get('/', function(req, res) {
-  res.send('Hello Typing World');
+  res.send('Hello Typing World!');
 });
 
 // User API routes
