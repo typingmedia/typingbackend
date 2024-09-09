@@ -8,7 +8,7 @@ import cors from "cors";
 const app = express();
 dotenv.config();
 
-const allowedOrigins = ["http://localhost:3000", "https://typing.media", "http://localhost:3001"];
+const allowedOrigins = ["http://localhost:3000", "https://typing.media", "http://localhost:3001","https://typing-frontend-typingmedias-projects.vercel.app/"];
 
 app.use(
   cors({
